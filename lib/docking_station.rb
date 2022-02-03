@@ -4,7 +4,8 @@ class DockingStation
   attr_reader :bike
 
   def release_bike
-    Bike.new
+    raise "Sorry, this Docking Station is empty" if @bike.nil?
+    @bike
   end
 
   def dock_bike(bike)
