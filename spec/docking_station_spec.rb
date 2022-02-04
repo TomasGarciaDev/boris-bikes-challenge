@@ -37,16 +37,10 @@ describe DockingStation do
     expect { subject.release_bike }.to raise_error "Sorry, this Docking Station is empty"
   end
 
-  # it "should raise an error if docking station has already bikes" do
-  #   bike1 = Bike.new
-  #   docking_station = DockingStation.new
-  #   docking_station.dock_bike(bike1)
-  #   bike2 = Bike.new
-  #   expect { docking_station.dock_bike(bike2) }.to raise_error "Sorry, this Docking Station is full"
-  # end
-
   it "should have a maximum capacity of 20 bikes" do 
-    20.times { subject.dock_bike(Bike.new) }
+    DockingStation::DEFAULT_CAPACITY.times do
+      subject.dock_bike(Bike.new)
+    end
     expect {subject.dock_bike(Bike.new) }.to raise_error "Sorry, this Docking Station is full"
   end
 end
