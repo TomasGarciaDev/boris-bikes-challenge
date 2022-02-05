@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'docking_station'
 
 describe DockingStation do
@@ -9,7 +11,7 @@ describe DockingStation do
     expect(subject.release_bike).to eq(bike)
   end
 
-  it "can check if the released bike instance is working?" do
+  it 'can check if the released bike instance is working?' do
     bike = Bike.new
     subject.dock_bike(bike)
     expect(subject.release_bike).to be_working
@@ -33,14 +35,38 @@ describe DockingStation do
     expect(subject.bikes[-1]).to eq bike
   end
 
-  it "should raise an error if docking station has no bikes" do
-    expect { subject.release_bike }.to raise_error "Sorry, this Docking Station is empty"
+  it 'should raise an error if docking station has no bikes' do
+    expect { subject.release_bike }.to raise_error 'Sorry, this Docking Station is empty'
   end
 
-  it "should have a maximum capacity of 20 bikes" do 
-    DockingStation::DEFAULT_CAPACITY.times do
-      subject.dock_bike(Bike.new)
+  it 'should should raise an error when station is full' do
+    subject.capacity.times { subject.dock_bike(Bike.new) }
+    expect { subject.dock_bike(Bike.new) }.to raise_error 'Sorry, this Docking Station is full'
+  end
+
+  it 'can set the capacity of the Docking Station' do
+    docking_station = DockingStation.new(30)
+    expect(docking_station.capacity).to eq 30
+  end
+
+  it 'can set the capacity of the Docking Station second test' do
+    docking_station = DockingStation.new(30)
+    30.times { docking_station.dock_bike(Bike.new)}
+    expect{ docking_station.dock_bike(Bike.new) }.to raise_error 'Sorry, this Docking Station is full'
+  end
+
+  it 'has a default of capacity of 20' do
+    expect(subject.capacity).to be DockingStation::DEFAULT_CAPACITY
+  end
+end
+
+describe DockingStation do
+  subject { DockingStation.new }
+  let(:bike) { Bike.new }
+  it 'defaults capacity' do
+    described_class::DEFAULT_CAPACITY.times do
+      subject.dock_bike(bike)
     end
-    expect {subject.dock_bike(Bike.new) }.to raise_error "Sorry, this Docking Station is full"
+    expect{ subject.dock_bike(bike) }.to raise_error 'Sorry, this Docking Station is full'
   end
 end
