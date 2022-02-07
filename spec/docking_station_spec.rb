@@ -5,7 +5,7 @@ require 'docking_station'
 describe DockingStation do
   it { is_expected.to respond_to :release_bike }
 
-  it 'releases a bike instance' do
+  it 'relreases a bike instance' do
     bike = Bike.new
     subject.dock_bike(bike)
     expect(subject.release_bike).to eq(bike)
@@ -57,6 +57,19 @@ describe DockingStation do
 
   it 'has a default of capacity of 20' do
     expect(subject.capacity).to be DockingStation::DEFAULT_CAPACITY
+  end
+
+  it 'user can report if a bike is broken' do
+    bike = Bike.new
+    bike.condition = false
+    subject.dock_bike(bike, false)
+    expect(subject.bikes[-1].working?).to eq(false)
+  end
+
+  it 'Docking Station does not realease broken bikes' do
+    bike = Bike.new
+    subject.dock_bike(bike, false)
+    expect{ subject.release_bike }.to raise_error 'Sorry, this bike is broken'
   end
 end
 
